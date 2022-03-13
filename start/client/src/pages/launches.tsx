@@ -1,10 +1,15 @@
 import { gql, useQuery } from "@apollo/client";
 import { LaunchTile, Header, Button, Loading } from "../components";
+import styled, { css } from "react-emotion";
 
 import React, { Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 
 import * as GetLaunchListTypes from "./__generated__/GetLaunchList";
+import { between } from "polished";
+
+// Stying
+import { mq } from "../styling/mq";
 
 export const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
@@ -52,11 +57,13 @@ const Launches: React.FC<LaunchesProps> = () => {
   return (
     <Fragment>
       <Header />
-      {data.launches &&
-        data.launches.launches &&
-        data.launches.launches.map((launch: any) => (
-          <LaunchTile key={launch.id} launch={launch} />
-        ))}
+      <LaunchTileContainer>
+        {data.launches &&
+          data.launches.launches &&
+          data.launches.launches.map((launch: any) => (
+            <LaunchTile key={launch.id} launch={launch} />
+          ))}
+      </LaunchTileContainer>
       {data.launches &&
         data.launches.hasMore &&
         (isLoadingMore ? (
@@ -79,5 +86,17 @@ const Launches: React.FC<LaunchesProps> = () => {
     </Fragment>
   );
 };
+
+const LaunchTileContainer = styled("div")({
+  display: "grid",
+  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  border: "1px solid red",
+  gridGap: "1rem",
+  marginBottom: "1rem",
+  // ${mq('mobile')} {
+  //   border: "1px solid green",
+  //   color: 'gray'
+  // }},
+});
 
 export default Launches;
